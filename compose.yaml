@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  postgresml:
+    image: ghcr.io/postgresml/postgresml:2.7.3
+    command: sleep infinity
+    ports:
+    - "5433:5432"
+    - "8000:8000"
+    volumes:
+    - postgresml_data:/var/lib/postgresql
+
+volumes:
+  postgresml_data:

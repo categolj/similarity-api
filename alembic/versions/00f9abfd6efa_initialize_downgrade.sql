@@ -1,0 +1,4 @@
+DROP TABLE entry;
+DROP TABLE metadata;
+DROP EXTENSION pgml;
+DROP EXTENSION vector;
