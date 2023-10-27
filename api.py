@@ -16,7 +16,11 @@ def get_all_entries():
             cursor.execute("""
             SELECT entry_id, title, last_modified_date, NULL AS similarity FROM entry ORDER BY last_modified_date DESC LIMIT 10
             """ if sentence is None else """
-            SELECT entry_id, title, last_modified_date, 1 - (embedding <=> (SELECT pgml.embed('intfloat/multilingual-e5-large', %s)::vector)) AS similarity FROM entry ORDER BY similarity DESC LIMIT 10
+            WITH request AS (SELECT pgml.embed('intfloat/multilingual-e5-large', %s)::vector(1024) AS embedding)
+            SELECT entry_id, title, last_modified_date, 1 - (embedding <=> (SELECT embedding FROM request)) AS similarity
+            FROM entry
+            ORDER BY similarity DESC
+            LIMIT 10
             """, (sentence,))
             results = cursor.fetchall()
             entries = [
